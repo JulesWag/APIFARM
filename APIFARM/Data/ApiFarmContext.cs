@@ -10,6 +10,8 @@ namespace APIFARM.Data
 
         public DbSet<Site> Sites { get; set; }
         public DbSet<Service> Services { get; set; }
+        public DbSet<Admin> Admins { get; set; }
+
 
     }
 }

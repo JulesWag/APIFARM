@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using APIFARM.Models;
+using APIFARM.Data;
 
 namespace APIFARM.Controllers
 {

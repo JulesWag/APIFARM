@@ -24,7 +24,7 @@ namespace APIFARM.Controllers
             return await _context.Sites.ToListAsync();
         }
 
-        // GET: api/sites/5
+        // GET: api/sites/
         [HttpGet("{id}")]
         public async Task<ActionResult<Site>> GetSite(int id)
         {
@@ -42,7 +42,7 @@ namespace APIFARM.Controllers
             return CreatedAtAction(nameof(GetSite), new { id = site.Id }, site);
         }
 
-        // PUT: api/sites/5
+        // PUT: api/sites/
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateSite(int id, Site site)
         {
@@ -52,7 +52,7 @@ namespace APIFARM.Controllers
             return NoContent();
         }
 
-        // DELETE: api/sites/5
+        // DELETE: api/sites/
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSite(int id)
         {

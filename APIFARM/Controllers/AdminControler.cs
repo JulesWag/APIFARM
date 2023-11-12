@@ -48,7 +48,7 @@ namespace APIFARM.Controllers
         {
             admin.Salt = GenerateSalt();
             admin.PasswordHash = HashPassword(admin.PasswordHash, admin.Salt);
-            admin.PasswordHash = null; // Supprimez la propriété Password si elle existe toujours dans le modèle
+            admin.PasswordHash = null; 
 
             _context.Admins.Add(admin);
             await _context.SaveChangesAsync();

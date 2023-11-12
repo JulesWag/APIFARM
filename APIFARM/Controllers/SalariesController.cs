@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
+﻿using APIFARM.Data;
 using APIFARM.Models;
-using APIFARM.Data;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace APIFARM.Controllers
 {
@@ -9,44 +9,85 @@ namespace APIFARM.Controllers
     [ApiController]
     public class SalariesController : ControllerBase
     {
-        // GET: api/Salaries
-        [HttpGet]
-        public ActionResult<IEnumerable<Salarie>> GetAllSalaries()
+        private readonly ApiFarmContext _context;
+
+        public SalariesController(ApiFarmContext context)
         {
-            // TODO: Récupérer tous les salariés depuis la base de données
-            return Ok(); // Retourne une réponse vide pour le moment
+            _context = context;
         }
 
-        // GET: api/Salaries/5
-        [HttpGet("{id}")]
-        public ActionResult<Salarie> GetSalarieById(int id)
+        // GET: api/Salaries
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Salarie>>> GetAllSalaries()
         {
-            // TODO: Récupérer le salarié avec l'ID spécifié depuis la base de données
-            return Ok(); // Retourne une réponse vide pour le moment
+            return await _context.Salaries.ToListAsync();
+        }
+
+        // GET: api/Salaries/
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Salarie>> GetSalarieById(int id)
+        {
+            var salarie = await _context.Salaries.FindAsync(id);
+            if (salarie == null)
+            {
+                return NotFound();
+            }
+            return salarie;
         }
 
         // POST: api/Salaries
         [HttpPost]
-        public ActionResult<Salarie> AddSalarie(Salarie salarie)
+        public async Task<ActionResult<Salarie>> AddSalarie(Salarie salarie)
         {
-            // TODO: Ajouter le salarié à la base de données
-            return CreatedAtAction(nameof(GetSalarieById), new { id = salarie.Id }, salarie); // Retourne une réponse de création
+            _context.Salaries.Add(salarie);
+            await _context.SaveChangesAsync();
+            return CreatedAtAction(nameof(GetSalarieById), new { id = salarie.Id }, salarie);
         }
 
-        // PUT: api/Salaries/5
+        // PUT: api/Salaries/
         [HttpPut("{id}")]
-        public IActionResult UpdateSalarie(int id, Salarie salarie)
+        public async Task<IActionResult> UpdateSalarie(int id, Salarie salarie)
         {
-            // TODO: Mettre à jour le salarié dans la base de données
-            return NoContent(); // Retourne une réponse indiquant que la mise à jour a réussi
+            if (id != salarie.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(salarie).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!_context.Salaries.Any(e => e.Id == id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
-        // DELETE: api/Salaries/5
+        // DELETE: api/Salaries/
         [HttpDelete("{id}")]
-        public IActionResult DeleteSalarie(int id)
+        public async Task<IActionResult> DeleteSalarie(int id)
         {
-            // TODO: Supprimer le salarié de la base de données
-            return NoContent(); // Retourne une réponse indiquant que la suppression a réussi
+            var salarie = await _context.Salaries.FindAsync(id);
+            if (salarie == null)
+            {
+                return NotFound();
+            }
+
+            _context.Salaries.Remove(salarie);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }

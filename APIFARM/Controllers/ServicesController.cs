@@ -24,7 +24,7 @@ namespace APIFARM.Controllers
             return await _context.Services.ToListAsync();
         }
 
-        // GET: api/services/5
+        // GET: api/services/
         [HttpGet("{id}")]
         public async Task<ActionResult<Service>> GetService(int id)
         {
@@ -42,7 +42,7 @@ namespace APIFARM.Controllers
             return CreatedAtAction(nameof(GetService), new { id = service.Id }, service);
         }
 
-        // PUT: api/services/5
+        // PUT: api/services/
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateService(int id, Service service)
         {
@@ -52,7 +52,7 @@ namespace APIFARM.Controllers
             return NoContent();
         }
 
-        // DELETE: api/services/5
+        // DELETE: api/services/
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteService(int id)
         {
